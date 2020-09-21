@@ -35,7 +35,7 @@ export const Landing = ({ page }: LandingProps) => {
                     {slideBetween.map(element => (
                         <motion.div
                             key={element.type.name}
-                            layoutTransition={{
+                            transition={{
                                 type: "spring",
                                 damping: 25,
                                 stiffness: 500

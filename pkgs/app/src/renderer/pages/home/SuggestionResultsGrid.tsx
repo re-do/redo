@@ -1,9 +1,7 @@
 import React from "react"
-import { Unlisted } from "@re-do/utils"
 import { SuggestionCard } from "./SuggestionCard"
 import { store } from "renderer/common"
-import { Card, Row, IconButton, Icons } from "@re-do/components"
-import { useMeQuery, MeQuery } from "@re-do/model/dist/react"
+import { Card, Row, Button, Icons } from "@re-do/components"
 import { test as runTest } from "@re-do/test"
 
 const welcomeSuggestion = {
@@ -13,9 +11,9 @@ const welcomeSuggestion = {
     data: null
 }
 
-const useSuggestions = (): Suggestion<UserItemKind>[] => {
+const useSuggestions = () => {
     const { cardFilter } = store.useQuery({ cardFilter: true })
-    const tests = useMeQuery({ fetchPolicy: "no-cache" }).data?.me?.tests
+    const tests: any[] = []
     return tests && tests.length
         ? tests
               .filter((test) =>
@@ -27,28 +25,22 @@ const useSuggestions = (): Suggestion<UserItemKind>[] => {
         : []
 }
 
-type UserData = MeQuery["me"]
-
-type UserItemKind = keyof UserData
-
-type UserItem<Kind extends UserItemKind> = Unlisted<UserData[Kind]>
-
-type Suggestion<Kind extends UserItemKind> = {
+type Suggestion = {
     title: string
     description: string
-    data: UserItem<Kind>
+    data: any
     extras?: JSX.Element
 }
 
 const suggestionTypes = {
-    tests: (test: UserItem<"tests">) => ({
+    tests: (test: any) => ({
         title: test.name,
-        description: test.tags.map((tag) => tag.name).join(", "),
+        description: test.tags.map((tag: any) => tag.name).join(", "),
         extras: (
-            <IconButton
+            <Button
                 Icon={Icons.run}
                 onClick={() =>
-                    runTest(test.steps.map((step) => [step.kind, step] as any))
+                    runTest(test.steps.map((step: any) => [step.kind, step] as any))
                 }
             />
         ),
@@ -56,14 +48,11 @@ const suggestionTypes = {
     })
 }
 
-type SuggestionTypes = typeof suggestionTypes
-type SuggestionKind = keyof SuggestionTypes
-
-const toSuggestion = <Kind extends SuggestionKind>(
-    kind: Kind,
-    data: UserItem<Kind>
-): Suggestion<Kind> => {
-    return suggestionTypes[kind](data) as Suggestion<Kind>
+const toSuggestion = (
+    kind: any,
+    data: any
+ ) => {
+    return [] as any
 }
 
 export const SuggestionResultsGrid = () => {
