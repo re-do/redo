@@ -5,11 +5,10 @@ import {
     TextInput,
     AppBar,
     Icons,
-    IconButton,
+    Button,
     ChipInput,
     ErrorText
 } from "@re-do/components"
-import { useCreateTestMutation, useMeQuery } from "@re-do/model/dist/react"
 import { deactivateLearner, resetLearner } from "state"
 import { LearnerEvents } from "./StepCards"
 import { store } from "renderer/common"
@@ -22,8 +21,9 @@ export const Learner = () => {
             testTags: true
         }
     }).learner
-    const [createTest, createTestResult] = useCreateTestMutation()
-    const existingTags = useMeQuery().data?.me.tags.map((tag) => tag.name) ?? []
+    // const [createTest, createTestResult] = useCreateTestMutation()
+    const existingTags: string[] = [] //useMeQuery().data?.me.tags.map((tag) => tag.name) ?? []
+    const createTestResult = {}
     return (
         <Column full>
             <AppBar height={120} align="center">
@@ -47,7 +47,7 @@ export const Learner = () => {
             </AppBar>
             <LearnerEvents steps={events} />
             <AppBar kind="bottom" justify="space-around">
-                <IconButton
+                <Button
                     Icon={Icons.close}
                     style={{ color: "white" }}
                     onClick={deactivateLearner}
@@ -56,7 +56,7 @@ export const Learner = () => {
                     <Spinner />
                 ) : (
                     <>
-                        <IconButton
+                        <Button
                             Icon={Icons.save}
                             style={{ color: "white" }}
                             onClick={async () => {

@@ -1,22 +1,24 @@
 import React from "react"
+import gql from "graphql-tag"
 import { FormText, FormSubmit, Form, Button, Column } from "@re-do/components"
 import { store } from "renderer/common"
 import { formatEmail } from "./common"
-import {
-    useSignInMutation,
-    SignInMutation,
-    SignInMutationVariables
-} from "@re-do/model/dist/react"
+import { useMutation } from "@apollo/client"
+
+const signIn = gql`mutation signIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password)
+}`
+
 
 export const SignIn = () => {
-    const [submit] = useSignInMutation()
+    const [submit] = useMutation(signIn)
     const disabled =
         store.useQuery({
             page: true
         }).page !== "SIGN_IN"
     return (
-        <Form<SignInMutationVariables, SignInMutation>
-            submit={submit}
+        <Form
+            submit={(variables: any) => submit(variables)}
             onData={(data) => store.mutate({ token: data.signIn })}
             transformValues={({ email, ...rest }) => {
                 return {

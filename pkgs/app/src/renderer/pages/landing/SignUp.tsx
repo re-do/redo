@@ -7,24 +7,29 @@ import {
     Button,
     Column
 } from "@re-do/components"
-import {
-    useSignUpMutation,
-    SignUpMutation,
-    SignUpMutationVariables
-} from "@re-do/model/dist/react"
 import { store } from "renderer/common"
 import { formatEmail } from "./common"
+import gql from "graphql-tag"
+import { useMutation } from "@apollo/client"
+
+const signUp = gql`mutation signUp(
+    $email: String!
+    $password: String!
+    $first: String!
+    $last: String!
+) {
+    signUp(email: $email, password: $password, first: $first, last: $last)
+}`
 
 export const SignUp = () => {
-    const [submit] = useSignUpMutation()
+    const [submit] = useMutation(signUp)
     const disabled =
         store.useQuery({
             page: true
         }).page !== "SIGN_UP"
     return (
-        <Form<SignUpMutationVariables, SignUpMutation>
-            validate={() => ({})}
-            submit={submit}
+        <Form
+            submit={(variables: any) => submit(variables)}
             onData={(data) => store.mutate({ token: data.signUp })}
             transformValues={({ email, ...rest }) => {
                 return {
