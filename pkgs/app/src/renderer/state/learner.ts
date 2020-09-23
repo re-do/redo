@@ -7,7 +7,7 @@ import {
     StepCreateWithoutTestsInput as StepInput,
     TagCreateWithoutTestInput as TagInput
 } from "@re-do/model"
-import { launch, BrowserName, browserHandlers } from "@re-do/test"
+import { launch, BrowserName } from "@re-do/test"
 import { store } from "renderer/common"
 import { isDev } from "@re-do/utils/dist/node"
 import { Root } from "./root"
@@ -87,18 +87,18 @@ const start = async () => {
         resolve(isDev() ? "dist" : __dirname, "injected.js"),
         "utf-8"
     )
-    await page.evaluateOnNewDocument(browserJs)
-    browser.on("disconnected", () => {
-        deactivateLearner()
-    })
-    // TODO: This could cause problems since it's in a side effect (maybe mutations shouldn't happen from side effects?)
-    store.mutate({
-        learner: {
-            lastConnectedEndpoint: browser.wsEndpoint,
-            lastMainWindowBounds: lastMainWindowBounds,
-            lastConnectedBrowser: "chrome"
-        }
-    })
+    // await page.evaluateOnNewDocument(browserJs)
+    // browser.on("disconnected", () => {
+    //     deactivateLearner()
+    // })
+    // // TODO: This could cause problems since it's in a side effect (maybe mutations shouldn't happen from side effects?)
+    // store.mutate({
+    //     learner: {
+    //         lastConnectedEndpoint: browser.wsEndpoint,
+    //         lastMainWindowBounds: lastMainWindowBounds,
+    //         lastConnectedBrowser: "chrome"
+    //     }
+    // })
 }
 
 const stop = async (context: Learner) => {
@@ -109,12 +109,12 @@ const stop = async (context: Learner) => {
     } = context
     if (lastConnectedEndpoint && lastConnectedBrowser) {
         try {
-            const browser = await browserHandlers[lastConnectedBrowser].connect(
-                {
-                    wsEndpoint: lastConnectedEndpoint
-                }
-            )
-            await browser.close()
+            // const browser = await browserHandlers[lastConnectedBrowser].connect(
+            //     {
+            //         wsEndpoint: lastConnectedEndpoint
+            //     }
+            // )
+            // await browser.close()
         } catch (e) {
             // TODO: Stop from unnecessarily logging an error here
             console.log("Browser was already disconnected.")

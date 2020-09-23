@@ -23,7 +23,7 @@ export const Learner = () => {
     }).learner
     // const [createTest, createTestResult] = useCreateTestMutation()
     const existingTags: string[] = [] //useMeQuery().data?.me.tags.map((tag) => tag.name) ?? []
-    const createTestResult = {}
+    const createTestResult = {} as any
     return (
         <Column full>
             <AppBar height={120} align="center">
@@ -52,6 +52,7 @@ export const Learner = () => {
                     style={{ color: "white" }}
                     onClick={deactivateLearner}
                 />
+                
                 {createTestResult.loading ? (
                     <Spinner />
                 ) : (
@@ -60,13 +61,13 @@ export const Learner = () => {
                             Icon={Icons.save}
                             style={{ color: "white" }}
                             onClick={async () => {
-                                await createTest({
-                                    variables: {
-                                        name,
-                                        tags,
-                                        steps: events
-                                    }
-                                })
+                                // await createTest({
+                                //     variables: {
+                                //         name,
+                                //         tags,
+                                //         steps: events
+                                //     }
+                                // })
                                 await resetLearner()
                                 await deactivateLearner()
                             }}
